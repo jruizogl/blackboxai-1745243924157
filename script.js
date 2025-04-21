@@ -1,19 +1,5 @@
-// Storage keys
-const STORAGE_KEY_CALENDAR = "calendarData";
-const STORAGE_KEY_AREAS = "areasData";
-
-// Initial areas data (default values)
-let areas = [
-    { id: 1, name: 'Calidad', color: 'bg-blue-500', active: true },
-    { id: 2, name: 'Recursos Humanos', color: 'bg-green-500', active: true },
-    { id: 3, name: 'TI', color: 'bg-yellow-500', active: true },
-    { id: 4, name: 'Seguridad Patrimonial', color: 'bg-purple-500', active: true },
-    { id: 5, name: 'Seguridad e Higiene', color: 'bg-red-500', active: true },
-    { id: 6, name: 'Mantenimiento', color: 'bg-pink-500', active: true },
-    { id: 7, name: 'Dirección', color: 'bg-indigo-500', active: true }
-];
-
-// Calendar data
+// Initial empty data
+let areas = [];
 let calendarData = [];
 
 // Mexican holidays 2025
@@ -32,11 +18,24 @@ const months = [
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
 ];
 
-// Save data to localStorage
-function saveData() {
+// Save data to server
+async function saveData() {
     try {
-        localStorage.setItem(STORAGE_KEY_CALENDAR, JSON.stringify(calendarData));
-        localStorage.setItem(STORAGE_KEY_AREAS, JSON.stringify(areas));
+        const response = await fetch('http://localhost:8000/save-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                calendarData: calendarData,
+                areas: areas
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al guardar los datos');
+        }
+
         showSaveNotification('Cambios guardados');
     } catch (error) {
         console.error('Error saving data:', error);
@@ -44,23 +43,24 @@ function saveData() {
     }
 }
 
-// Load data from localStorage
-function loadData() {
+// Load data from server
+async function loadData() {
     try {
-        const savedCalendarData = localStorage.getItem(STORAGE_KEY_CALENDAR);
-        const savedAreasData = localStorage.getItem(STORAGE_KEY_AREAS);
+        const response = await fetch('http://localhost:8000/get-data');
+        if (!response.ok) {
+            throw new Error('Error al cargar los datos');
+        }
 
-        if (savedCalendarData && savedAreasData) {
-            calendarData = JSON.parse(savedCalendarData);
-            areas = JSON.parse(savedAreasData);
+        const data = await response.json();
+        if (data.areas && data.calendarData) {
+            areas = data.areas;
+            calendarData = data.calendarData;
             return true;
         }
         return false;
     } catch (error) {
         console.error('Error loading data:', error);
-        // Clear potentially corrupted data
-        localStorage.removeItem(STORAGE_KEY_CALENDAR);
-        localStorage.removeItem(STORAGE_KEY_AREAS);
+        showSaveNotification('Error al cargar los datos', true);
         return false;
     }
 }
@@ -98,19 +98,43 @@ function showSaveNotification(message, isError = false) {
 }
 
 // Initialize calendar data
-function initializeCalendarData() {
+async function initializeCalendarData() {
     console.log('Initializing calendar data...'); // Debug log
     
     try {
         // Try to load saved data
-        if (loadData()) {
+        const dataLoaded = await loadData();
+        if (dataLoaded) {
             console.log('Loaded saved calendar data');
             renderCalendar();
             renderAreaLegend();
             return;
         }
 
-        // If no saved data, initialize with defaults
+        // If no saved data exists, initialize with default data
+        const response = await fetch('http://localhost:8000/get-data');
+        if (!response.ok) {
+            throw new Error('Error al cargar los datos iniciales');
+        }
+
+        const defaultData = await response.json();
+        
+        // If no data exists yet, initialize with default areas
+        if (!defaultData.areas || defaultData.areas.length === 0) {
+            areas = [
+                { id: 1, name: 'Calidad', color: 'bg-blue-500', active: true },
+                { id: 2, name: 'Recursos Humanos', color: 'bg-green-500', active: true },
+                { id: 3, name: 'TI', color: 'bg-yellow-500', active: true },
+                { id: 4, name: 'Seguridad Patrimonial', color: 'bg-purple-500', active: true },
+                { id: 5, name: 'Seguridad e Higiene', color: 'bg-red-500', active: true },
+                { id: 6, name: 'Mantenimiento', color: 'bg-pink-500', active: true },
+                { id: 7, name: 'Dirección', color: 'bg-indigo-500', active: true }
+            ];
+        } else {
+            areas = defaultData.areas;
+        }
+
+        // Initialize calendar data
         calendarData = months.map((month, index) => {
             // Get active areas
             const activeAreas = areas.filter(a => a.active);
