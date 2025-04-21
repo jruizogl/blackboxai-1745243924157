@@ -9,9 +9,10 @@ Esta guía te ayudará a configurar el sistema en Supabase y desplegarlo en Verc
    - Crea un nuevo proyecto con el nombre "microsoft-licenses" o el que prefieras
 
 2. **Configurar la base de datos**:
-   - Ve a la sección "SQL Editor" en Supabase
-   - Copia y pega el contenido del archivo `setup.sql` (incluido en este proyecto)
-   - Ejecuta el script para crear la tabla `ms_licenses` y las funciones necesarias
+   - Ve a la sección "SQL Editor" en Supabase (https://yoggndevscherwfxmijg.supabase.co)
+   - Copia y pega el contenido del archivo `crear_tabla.sql` (incluido en este proyecto)
+   - Haz clic en "Run" o "Ejecutar" para crear la tabla `ms_licenses` y los datos de ejemplo
+   - Esto creará la estructura necesaria y añadirá algunos datos de muestra
 
 3. **Obtener las credenciales de API**:
    - Ve a "Settings" > "API" en tu proyecto de Supabase
