@@ -1,6 +1,6 @@
 // Obtener configuración desde config.js
-const SUPABASE_URL = window.appConfig?.supabaseUrl || 'https://tperggrkgjexpsibgmtb.supabase.co';
-const SUPABASE_KEY = window.appConfig?.supabaseKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwZXJnZ3JrZ2pleHBzaWJnbXRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTAxODYsImV4cCI6MjA2MDgyNjE4Nn0.7ackU8djT7cNvNzznjfHU52USlFulpkub6xnMUq8DyQ';
+const SUPABASE_URL = window.appConfig?.supabaseUrl || 'https://yoggndevscherwfxmijg.supabase.co';
+const SUPABASE_KEY = window.appConfig?.supabaseKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvZ2duZGV2c2NoZXJ3ZnhtaWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNjIyNjIsImV4cCI6MjA2MDgzODI2Mn0.JZ-FD37pDx-yCaqqQENkXElQOFUi61F5FT61795nToI';
 const DEMO_MODE_KEY = window.appConfig?.demoModeKey || 'ms_licenses_demo_data';
 const APP_VERSION = window.appConfig?.version || '1.0.0';
 
