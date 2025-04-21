@@ -1,46 +1,98 @@
-# Calendario de Visitas - Open Gate
+# Dashboard de Gestión de Licencias Microsoft
 
-Calendario interactivo para gestionar visitas a Silao, con persistencia de datos y sincronización entre pestañas.
+Sistema de gestión de licencias de Microsoft Office 365 con interfaz web moderna, visualización de datos y almacenamiento en la nube.
 
-## Demo en vivo
+## 📋 Características
 
-Puedes ver el calendario funcionando aquí: [Demo del Calendario](https://tu-usuario.github.io/calendario-visitas)
+- 🔑 Seguimiento completo de licencias de Office 365
+- 👤 Gestión de asignaciones de usuarios
+- 📊 Dashboard visual con estadísticas clave
+- 📈 Gráficos de distribución de licencias
+- 🔍 Búsqueda y filtrado avanzado
+- 📱 Diseño responsivo para todos los dispositivos
+- 🔄 Sincronización en tiempo real
+- 📝 Historial de cambios en licencias
+- 💰 Seguimiento de costos mensuales
 
-## Características
+## 🚀 Inicio Rápido
 
-- 📅 Calendario completo para 2025
-- 🔄 Persistencia de datos local
-- 🔄 Sincronización entre pestañas
-- 📱 Diseño responsive
-- 🎨 Interfaz moderna con Tailwind CSS
-- 🏢 Gestión de áreas por colores
-- 📊 Vista mensual de visitas
-- 🔔 Notificaciones de cambios
+1. Clona o descarga este repositorio
+2. Ejecuta `start-server.cmd` para iniciar el servidor local
+3. Abre tu navegador y ve a `http://localhost:8000`
 
-## Archivos
+## 🛠️ Tecnologías Utilizadas
 
-- `index.html` - Interfaz del calendario
-- `script.js` - Lógica y manejo de datos
+- **Frontend:** HTML, JavaScript, Tailwind CSS
+- **Gráficos:** Chart.js
+- **Backend:** Supabase (Base de datos PostgreSQL)
+- **Servidor:** Python HTTP Server
+- **Iconos:** Font Awesome
+- **Fuentes:** Google Fonts (Inter)
 
-## Uso
+## 📋 Gestión de Licencias
 
-1. Clona el repositorio
-```bash
-git clone https://github.com/tu-usuario/calendario-visitas.git
-```
+El dashboard permite:
 
-2. Abre `index.html` en tu navegador
+- Ver todas las licencias en una tabla ordenada
+- Añadir nuevas licencias
+- Editar licencias existentes
+- Eliminar licencias
+- Filtrar licencias por tipo, usuario o estado
+- Visualizar la distribución de licencias por tipo y estado
 
-O simplemente visita la [versión en línea](https://tu-usuario.github.io/calendario-visitas)
+## 🔧 Configuración de Base de Datos
 
-## Desarrollo
+El proyecto utiliza Supabase como backend. Se incluye un archivo `setup.sql` con la estructura de la base de datos.
 
-El proyecto usa:
-- Tailwind CSS para estilos
-- Font Awesome para iconos
-- LocalStorage para persistencia
-- JavaScript moderno (ES6+)
+### Estructura de la Tabla
 
-## Licencia
+La tabla `ms_licenses` almacena la siguiente información:
 
-© 2025 Open Gate Logistics. Todos los derechos reservados.
+- ID único
+- Tipo de licencia
+- Nombre de usuario
+- Persona asignada
+- Fecha de renovación
+- Costo mensual
+- Estado (Activa, Inactiva, Pendiente)
+- Notas
+- Timestamps de creación y actualización
+
+## 📊 Dashboard
+
+El dashboard principal muestra:
+
+- Total de licencias
+- Licencias asignadas
+- Licencias disponibles
+- Costo total mensual
+- Gráficos de distribución
+
+## 💡 Uso
+
+1. **Ver licencias**: La tabla principal muestra todas las licencias
+2. **Añadir licencia**: Haz clic en el botón "Nueva Licencia"
+3. **Editar licencia**: Haz clic en el icono de edición en la fila correspondiente
+4. **Eliminar licencia**: Haz clic en el icono de eliminar en la fila correspondiente
+5. **Buscar**: Usa el campo de búsqueda para filtrar por cualquier criterio
+6. **Sincronizar**: Haz clic en "Sincronizar" para actualizar los datos desde el servidor
+
+## 📱 Responsive
+
+El diseño se adapta automáticamente a cualquier tamaño de pantalla:
+- Escritorio: Vista completa con todas las funcionalidades
+- Tablet: Diseño optimizado para pantallas medianas
+- Móvil: Interfaz simplificada para navegación fácil en pantallas pequeñas
+
+## 🔒 Seguridad
+
+- Autenticación gestionada por Supabase
+- Políticas de Row Level Security (RLS) implementadas
+- Conexión segura mediante HTTPS
+
+## 🤝 Contribuir
+
+Si deseas contribuir a este proyecto, por favor:
+1. Haz un fork del repositorio
+2. Crea una rama para tu funcionalidad
+3. Envía un pull request
