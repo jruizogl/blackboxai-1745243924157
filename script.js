@@ -1,4 +1,8 @@
-// Initial areas data
+// Storage keys
+const STORAGE_KEY_CALENDAR = "calendarData";
+const STORAGE_KEY_AREAS = "areasData";
+
+// Initial areas data (default values)
 let areas = [
     { id: 1, name: 'Calidad', color: 'bg-blue-500', active: true },
     { id: 2, name: 'Recursos Humanos', color: 'bg-green-500', active: true },
@@ -28,11 +32,85 @@ const months = [
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
 ];
 
+// Save data to localStorage
+function saveData() {
+    try {
+        localStorage.setItem(STORAGE_KEY_CALENDAR, JSON.stringify(calendarData));
+        localStorage.setItem(STORAGE_KEY_AREAS, JSON.stringify(areas));
+        showSaveNotification('Cambios guardados');
+    } catch (error) {
+        console.error('Error saving data:', error);
+        showSaveNotification('Error al guardar cambios', true);
+    }
+}
+
+// Load data from localStorage
+function loadData() {
+    try {
+        const savedCalendarData = localStorage.getItem(STORAGE_KEY_CALENDAR);
+        const savedAreasData = localStorage.getItem(STORAGE_KEY_AREAS);
+
+        if (savedCalendarData && savedAreasData) {
+            calendarData = JSON.parse(savedCalendarData);
+            areas = JSON.parse(savedAreasData);
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error loading data:', error);
+        // Clear potentially corrupted data
+        localStorage.removeItem(STORAGE_KEY_CALENDAR);
+        localStorage.removeItem(STORAGE_KEY_AREAS);
+        return false;
+    }
+}
+
+// Show save notification
+function showSaveNotification(message, isError = false) {
+    // Create notification container if it doesn't exist
+    let notificationContainer = document.getElementById('saveNotification');
+    if (!notificationContainer) {
+        notificationContainer = document.createElement('div');
+        notificationContainer.id = 'saveNotification';
+        notificationContainer.className = 'fixed bottom-4 right-4 z-50 transition-all duration-300 transform translate-y-full opacity-0';
+        document.body.appendChild(notificationContainer);
+    }
+
+    // Set notification content and style
+    const bgColor = isError ? 'bg-red-500' : 'bg-green-500';
+    const icon = isError ? 'fa-exclamation-circle' : 'fa-check-circle';
+    notificationContainer.innerHTML = `
+        <div class="${bgColor} text-white px-4 py-2 rounded-lg shadow-lg flex items-center">
+            <i class="fas ${icon} mr-2"></i>
+            <span>${message}</span>
+        </div>
+    `;
+
+    // Show notification with animation
+    setTimeout(() => {
+        notificationContainer.classList.remove('translate-y-full', 'opacity-0');
+    }, 100);
+
+    // Hide notification after delay
+    setTimeout(() => {
+        notificationContainer.classList.add('translate-y-full', 'opacity-0');
+    }, 3000);
+}
+
 // Initialize calendar data
 function initializeCalendarData() {
     console.log('Initializing calendar data...'); // Debug log
     
     try {
+        // Try to load saved data
+        if (loadData()) {
+            console.log('Loaded saved calendar data');
+            renderCalendar();
+            renderAreaLegend();
+            return;
+        }
+
+        // If no saved data, initialize with defaults
         calendarData = months.map((month, index) => {
             // Get active areas
             const activeAreas = areas.filter(a => a.active);
@@ -656,6 +734,9 @@ function saveCardEdit() {
             // Update the calendar data
             calendarData[monthIndex] = updatedMonth;
             
+            // Save changes to localStorage
+            saveData();
+            
             // Force a complete re-render
             const grid = document.getElementById('calendarGrid');
             grid.innerHTML = '';
@@ -715,6 +796,7 @@ function toggleArea(id) {
         renderCalendar();
         renderAreaLegend();
         renderAreasConfig();
+        saveData();
     }
 }
 
@@ -725,6 +807,7 @@ function removeArea(id) {
         renderCalendar();
         renderAreaLegend();
         renderAreasConfig();
+        saveData();
     } else {
         alert('Debe mantener al menos un área activa');
     }
@@ -750,6 +833,7 @@ function addNewArea() {
         renderCalendar();
         renderAreaLegend();
         renderAreasConfig();
+        saveData();
     }
 }
 
@@ -757,6 +841,7 @@ function addNewArea() {
 function saveConfig() {
     renderCalendar();
     renderAreaLegend();
+    saveData();
     closeConfigModal();
 }
 
