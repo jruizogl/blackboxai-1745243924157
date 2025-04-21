@@ -1,60 +1,45 @@
-# Calendario de Visitas - Open Gate Logistics
+# Calendario de Visitas - Open Gate
 
-Aplicación web para gestionar el calendario de visitas a Silao, con persistencia de datos y gestión de áreas.
+Calendario interactivo para gestionar visitas a Silao, con persistencia de datos y sincronización entre pestañas.
+
+## Demo en vivo
+
+Puedes ver el calendario funcionando aquí: [Demo del Calendario](https://tu-usuario.github.io/calendario-visitas)
 
 ## Características
 
-- Calendario interactivo para el año 2025
-- Gestión de visitas por mes
-- Gestión de áreas (agregar, eliminar, activar/desactivar)
-- Persistencia de datos usando almacenamiento JSON
-- Interfaz moderna y responsive con Tailwind CSS
+- 📅 Calendario completo para 2025
+- 🔄 Persistencia de datos local
+- 🔄 Sincronización entre pestañas
+- 📱 Diseño responsive
+- 🎨 Interfaz moderna con Tailwind CSS
+- 🏢 Gestión de áreas por colores
+- 📊 Vista mensual de visitas
+- 🔔 Notificaciones de cambios
 
-## Requisitos
+## Archivos
 
-- Python 3.7 o superior
-- Navegador web moderno
-
-## Instalación
-
-1. Clona el repositorio:
-```bash
-git clone https://github.com/tu-usuario/calendario-visitas.git
-cd calendario-visitas
-```
-
-2. Inicia el servidor:
-```bash
-python server.py
-```
-
-3. Abre tu navegador y visita:
-```
-http://localhost:8000
-```
-
-## Estructura de Archivos
-
-- `index.html` - Interfaz principal del calendario
-- `script.js` - Lógica del calendario y manipulación de datos
-- `server.py` - Servidor Python para persistencia de datos
-- `data.json` - Almacenamiento de datos del calendario
+- `index.html` - Interfaz del calendario
+- `script.js` - Lógica y manejo de datos
 
 ## Uso
 
-1. El calendario muestra las visitas programadas por mes
-2. Haz clic en un mes para ver/editar sus visitas
-3. Usa el botón de Configuración para gestionar las áreas
-4. Los cambios se guardan automáticamente
+1. Clona el repositorio
+```bash
+git clone https://github.com/tu-usuario/calendario-visitas.git
+```
 
-## Tecnologías
+2. Abre `index.html` en tu navegador
 
-- HTML5
-- JavaScript (ES6+)
-- Tailwind CSS
-- Python (Servidor HTTP)
-- Font Awesome (Iconos)
-- Google Fonts
+O simplemente visita la [versión en línea](https://tu-usuario.github.io/calendario-visitas)
+
+## Desarrollo
+
+El proyecto usa:
+- Tailwind CSS para estilos
+- Font Awesome para iconos
+- LocalStorage para persistencia
+- JavaScript moderno (ES6+)
 
 ## Licencia
 
