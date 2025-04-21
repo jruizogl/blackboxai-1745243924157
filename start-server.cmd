@@ -1,0 +1,3 @@
+@echo off
+echo Iniciando servidor del calendario...
+python server.py
