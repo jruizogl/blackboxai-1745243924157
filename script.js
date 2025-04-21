@@ -44,26 +44,33 @@ async function saveData() {
     }
 }
 
-// Load data from server
-async function loadData() {
-    try {
-        const response = await fetch('/get-data');
-        if (!response.ok) {
-            throw new Error('Error al cargar los datos');
-        }
+// Load data from server with retry
+async function loadData(retryCount = 3) {
+    for (let i = 0; i < retryCount; i++) {
+        try {
+            const response = await fetch('/get-data');
+            if (!response.ok) {
+                throw new Error('Error al cargar los datos');
+            }
 
-        const data = await response.json();
-        if (data.areas && Array.isArray(data.areas)) {
-            areas = data.areas;
-            calendarData = Array.isArray(data.calendarData) ? data.calendarData : [];
-            return true;
+            const data = await response.json();
+            if (data.areas && Array.isArray(data.areas)) {
+                areas = data.areas;
+                calendarData = Array.isArray(data.calendarData) ? data.calendarData : [];
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error(`Error loading data (attempt ${i + 1}/${retryCount}):`, error);
+            if (i === retryCount - 1) {
+                alert('Error al cargar los datos. Por favor, recarga la página.');
+                return false;
+            }
+            // Esperar 1 segundo antes de reintentar
+            await new Promise(resolve => setTimeout(resolve, 1000));
         }
-        return false;
-    } catch (error) {
-        console.error('Error loading data:', error);
-        alert('Error al cargar los datos. Por favor, recarga la página.');
-        return false;
     }
+    return false;
 }
 
 // Show save notification
@@ -105,67 +112,44 @@ async function initializeCalendarData() {
     try {
         // Try to load saved data
         const dataLoaded = await loadData();
-        if (dataLoaded) {
-            console.log('Loaded saved calendar data');
-            renderCalendar();
-            renderAreaLegend();
-            return;
-        }
-
-        // If no saved data exists, initialize with default data
-        const response = await fetch('http://localhost:8000/get-data');
-        if (!response.ok) {
-            throw new Error('Error al cargar los datos iniciales');
-        }
-
-        const defaultData = await response.json();
         
-        // If no data exists yet, initialize with default areas
-        if (!defaultData.areas || defaultData.areas.length === 0) {
-            areas = [
-                { id: 1, name: 'Calidad', color: 'bg-blue-500', active: true },
-                { id: 2, name: 'Recursos Humanos', color: 'bg-green-500', active: true },
-                { id: 3, name: 'TI', color: 'bg-yellow-500', active: true },
-                { id: 4, name: 'Seguridad Patrimonial', color: 'bg-purple-500', active: true },
-                { id: 5, name: 'Seguridad e Higiene', color: 'bg-red-500', active: true },
-                { id: 6, name: 'Mantenimiento', color: 'bg-pink-500', active: true },
-                { id: 7, name: 'Dirección', color: 'bg-indigo-500', active: true }
-            ];
-        } else {
-            areas = defaultData.areas;
+        // Si no hay datos de calendario pero sí hay áreas, inicializar el calendario
+        if (areas.length > 0 && (!calendarData || calendarData.length === 0)) {
+            console.log('Initializing calendar with default data');
+            calendarData = months.map((month, index) => {
+                // Get active areas
+                const activeAreas = areas.filter(a => a.active);
+                if (activeAreas.length === 0) {
+                    throw new Error('No hay áreas activas disponibles');
+                }
+                
+                const defaultArea = activeAreas[index % activeAreas.length];
+                
+                // Get first workday as YYYY-MM-DD string
+                const firstWorkday = findFirstWorkday(2025, index);
+                
+                // Create month data
+                const monthData = {
+                    month: month,
+                    visits: [{
+                        date: firstWorkday,
+                        areas: [{
+                            id: defaultArea.id,
+                            name: defaultArea.name,
+                            color: defaultArea.color
+                        }]
+                    }]
+                };
+                
+                console.log(`Initialized ${month} with:`, monthData);
+                return monthData;
+            });
+
+            // Save the initialized data
+            await saveData();
         }
 
-        // Initialize calendar data
-        calendarData = months.map((month, index) => {
-            // Get active areas
-            const activeAreas = areas.filter(a => a.active);
-            if (activeAreas.length === 0) {
-                throw new Error('No hay áreas activas disponibles');
-            }
-            
-            const defaultArea = activeAreas[index % activeAreas.length];
-            
-            // Get first workday as YYYY-MM-DD string
-            const firstWorkday = findFirstWorkday(2025, index);
-            
-            // Create month data
-            const monthData = {
-                month: month,
-                visits: [{
-                    date: firstWorkday,
-                    areas: [{
-                        id: defaultArea.id,
-                        name: defaultArea.name,
-                        color: defaultArea.color
-                    }]
-                }]
-            };
-            
-            console.log(`Initialized ${month} with:`, monthData); // Debug log
-            return monthData;
-        });
-
-        console.log('Calendar data initialized:', calendarData); // Debug log
+        console.log('Calendar data:', calendarData);
         renderCalendar();
         renderAreaLegend();
     } catch (error) {
