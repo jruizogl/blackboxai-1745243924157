@@ -54,9 +54,34 @@ async function loadData(retryCount = 3) {
             }
 
             const data = await response.json();
+            console.log('Loaded data:', data);
+
             if (data.areas && Array.isArray(data.areas)) {
                 areas = data.areas;
-                calendarData = Array.isArray(data.calendarData) ? data.calendarData : [];
+                if (data.calendarData && Array.isArray(data.calendarData)) {
+                    calendarData = data.calendarData;
+                } else {
+                    // Initialize calendar data if not present
+                    calendarData = months.map((month, index) => {
+                        const activeAreas = areas.filter(a => a.active);
+                        const defaultArea = activeAreas[index % activeAreas.length];
+                        const firstWorkday = findFirstWorkday(2025, index);
+                        
+                        return {
+                            month: month,
+                            visits: [{
+                                date: firstWorkday,
+                                areas: [{
+                                    id: defaultArea.id,
+                                    name: defaultArea.name,
+                                    color: defaultArea.color
+                                }]
+                            }]
+                        };
+                    });
+                    // Save the initialized data
+                    await saveData();
+                }
                 return true;
             }
             return false;
@@ -66,7 +91,7 @@ async function loadData(retryCount = 3) {
                 alert('Error al cargar los datos. Por favor, recarga la página.');
                 return false;
             }
-            // Esperar 1 segundo antes de reintentar
+            // Wait 1 second before retrying
             await new Promise(resolve => setTimeout(resolve, 1000));
         }
     }
