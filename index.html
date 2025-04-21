@@ -3,119 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario de Visitas a Silao - Open Gate Logistics</title>
+    <title>Calendario de Visitas - Open Gate</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        .area-card {
-            transition: transform 0.2s ease-in-out;
-            cursor: pointer;
-        }
-        .area-card:hover {
-            transform: translateY(-5px);
-        }
-        .modal {
-            transition: opacity 0.3s ease-in-out;
-        }
-    </style>
 </head>
-<body class="bg-gray-50 font-inter">
-    <!-- Header with Logo -->
-    <header class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-6 flex items-center justify-between">
-            <img src="https://i.postimg.cc/BvwTXwHR/Logo-Open-Gate.png" alt="Open Gate Logistics Logo" class="h-16">
-            <button onclick="openConfigModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                <i class="fas fa-cog mr-2"></i>Configuración
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-        <!-- Year and Legend Section -->
-        <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4 md:mb-0">Calendario de Visitas a Silao 2025</h2>
-            <div id="areaLegend" class="flex flex-wrap gap-4">
-                <!-- Areas will be dynamically populated here -->
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <img src="https://i.postimg.cc/BvwTXwHR/Logo-Open-Gate.png" alt="Open Gate Logo" class="h-8">
+                <button onclick="openConfigModal()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+                    <i class="fas fa-cog mr-2"></i>
+                    Configuración
+                </button>
             </div>
         </div>
+    </nav>
 
-        <!-- Calendar Grid -->
-        <div id="calendarGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- Calendar cards will be dynamically populated here -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col space-y-4">
+            <div class="flex flex-col space-y-2">
+                <h1 class="text-3xl font-bold text-gray-900">Calendario de Visitas a Silao 2025</h1>
+                <div class="flex flex-wrap gap-2">
+                    <div id="areaLegend" class="flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+            <div id="calendarGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
         </div>
     </main>
 
-    <!-- Configuration Modal -->
-    <div id="configModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-6 w-full max-w-2xl">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold">Configuración</h3>
-                <button onclick="closeConfigModal()" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <!-- Areas Management -->
-            <div class="mb-6">
-                <h4 class="text-lg font-semibold mb-4">Gestión de Áreas</h4>
-                <div id="areasList" class="space-y-2 max-h-60 overflow-y-auto">
-                    <!-- Areas will be dynamically populated here -->
-                </div>
-                <div class="mt-4 flex gap-4">
-                    <input type="text" id="newAreaInput" placeholder="Nombre de nueva área" 
-                           class="border rounded px-3 py-2 flex-grow">
-                    <button onclick="addNewArea()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                        <i class="fas fa-plus mr-2"></i>Agregar
-                    </button>
-                </div>
-            </div>
-
-            <div class="flex justify-end gap-4">
-                <button onclick="closeConfigModal()" class="px-4 py-2 border rounded hover:bg-gray-100">
-                    Cancelar
-                </button>
-                <button onclick="saveConfig()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                    Guardar Cambios
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Card Modal -->
-    <div id="editCardModal" class="modal fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold" id="editCardTitle"></h3>
-                <button onclick="closeEditModal()" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div id="visitsContainer" class="space-y-4">
-                <!-- Visit items will be dynamically populated here -->
-            </div>
-
-            <div class="mt-6 flex justify-between items-center">
-                <button onclick="addVisit()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                    <i class="fas fa-plus mr-2"></i>Agregar Visita
-                </button>
-                <div class="flex gap-4">
-                    <button onclick="closeEditModal()" class="px-4 py-2 border rounded hover:bg-gray-100">
-                        Cancelar
-                    </button>
-                    <button onclick="saveCardEdit()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                        Guardar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-6 mt-12">
-        <div class="container mx-auto px-4 text-center">
+    <footer class="bg-gray-800 text-white mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <p>&copy; 2025 Open Gate Logistics. Todos los derechos reservados.</p>
         </div>
     </footer>
