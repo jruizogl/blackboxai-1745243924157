@@ -1,98 +1,102 @@
-# Dashboard de Gestión de Licencias Microsoft
+# Sistema de Gestión de Licencias Microsoft
 
-Sistema de gestión de licencias de Microsoft Office 365 con interfaz web moderna, visualización de datos y almacenamiento en la nube.
+Sistema completo para gestionar licencias de Microsoft Office 365 con interfaz web moderna, visualización de datos y almacenamiento en Supabase.
 
 ## 📋 Características
 
-- 🔑 Seguimiento completo de licencias de Office 365
-- 👤 Gestión de asignaciones de usuarios
+- 🔑 Gestión integral de licencias de Microsoft Office 365
+- 👤 Seguimiento detallado de asignaciones y usuarios
 - 📊 Dashboard visual con estadísticas clave
-- 📈 Gráficos de distribución de licencias
+- 📝 Gestión de catálogos (Áreas, Ubicaciones, Bodegas, Puestos)
 - 🔍 Búsqueda y filtrado avanzado
 - 📱 Diseño responsivo para todos los dispositivos
-- 🔄 Sincronización en tiempo real
-- 📝 Historial de cambios en licencias
-- 💰 Seguimiento de costos mensuales
+- 🔄 Sincronización en tiempo real con Supabase
+- 📈 Vista detallada con todos los campos requeridos
 
-## 🚀 Inicio Rápido
+## 🛠️ Estructura del Sistema
 
-1. Clona o descarga este repositorio
-2. Ejecuta `start-server.cmd` para iniciar el servidor local
-3. Abre tu navegador y ve a `http://localhost:8000`
+El sistema consta de tres vistas principales:
 
-## 🛠️ Tecnologías Utilizadas
+1. **Dashboard Principal** (index.html)
+   - Vista general con estadísticas y datos básicos
+   - Gráficos de distribución de licencias
 
-- **Frontend:** HTML, JavaScript, Tailwind CSS
-- **Gráficos:** Chart.js
-- **Backend:** Supabase (Base de datos PostgreSQL)
-- **Servidor:** Python HTTP Server
-- **Iconos:** Font Awesome
-- **Fuentes:** Google Fonts (Inter)
+2. **Vista Detallada** (detailed-view.html)
+   - Tabla completa con todos los campos solicitados
+   - Filtros avanzados por área, ubicación, bodega, etc.
+   - Gestión completa de licencias
 
-## 📋 Gestión de Licencias
+3. **Gestión de Catálogos** (catalogs.html)
+   - Administración de Áreas
+   - Administración de Ubicaciones
+   - Administración de Bodegas
+   - Administración de Puestos
 
-El dashboard permite:
+## 📋 Campos de Licencia Incluidos
 
-- Ver todas las licencias en una tabla ordenada
-- Añadir nuevas licencias
-- Editar licencias existentes
-- Eliminar licencias
-- Filtrar licencias por tipo, usuario o estado
-- Visualizar la distribución de licencias por tipo y estado
-
-## 🔧 Configuración de Base de Datos
-
-El proyecto utiliza Supabase como backend. Se incluye un archivo `setup.sql` con la estructura de la base de datos.
-
-### Estructura de la Tabla
-
-La tabla `ms_licenses` almacena la siguiente información:
-
-- ID único
-- Tipo de licencia
-- Nombre de usuario
-- Persona asignada
-- Fecha de renovación
-- Costo mensual
-- Estado (Activa, Inactiva, Pendiente)
+- Nombre Completo
+- Correo/usuario
+- Status
+- Cuenta
+- Puesto
+- Área
+- Ubicación
+- Bodega
+- Tipo de Licencia
+- Fecha de Renovación
+- Costo Mensual
 - Notas
-- Timestamps de creación y actualización
 
-## 📊 Dashboard
+## 🔧 Tecnologías Utilizadas
 
-El dashboard principal muestra:
+- **Frontend:** HTML, JavaScript moderno, Tailwind CSS
+- **Almacenamiento:** Supabase (PostgreSQL)
+- **Gráficos:** Chart.js
+- **Estilos:** Google Fonts (Inter), Font Awesome para iconos
 
-- Total de licencias
-- Licencias asignadas
-- Licencias disponibles
-- Costo total mensual
-- Gráficos de distribución
+## 🚀 Configuración
 
-## 💡 Uso
+1. **Base de Datos Supabase**
+   - Ejecuta el script `crear_tabla.sql` en tu proyecto Supabase
+   - Este script creará todas las tablas necesarias y datos de ejemplo
 
-1. **Ver licencias**: La tabla principal muestra todas las licencias
-2. **Añadir licencia**: Haz clic en el botón "Nueva Licencia"
-3. **Editar licencia**: Haz clic en el icono de edición en la fila correspondiente
-4. **Eliminar licencia**: Haz clic en el icono de eliminar en la fila correspondiente
-5. **Buscar**: Usa el campo de búsqueda para filtrar por cualquier criterio
-6. **Sincronizar**: Haz clic en "Sincronizar" para actualizar los datos desde el servidor
+2. **Configuración de Credenciales**
+   - Las credenciales ya están configuradas en `config.js` con tu URL y clave API de Supabase
 
-## 📱 Responsive
+## 📱 Uso del Sistema
 
-El diseño se adapta automáticamente a cualquier tamaño de pantalla:
-- Escritorio: Vista completa con todas las funcionalidades
-- Tablet: Diseño optimizado para pantallas medianas
-- Móvil: Interfaz simplificada para navegación fácil en pantallas pequeñas
+1. **Inicio**
+   - Abre `index.html` para ver el dashboard principal
+   - Navega entre las diferentes vistas usando el menú superior
+
+2. **Gestión de Licencias**
+   - Agrega licencias con el botón "Nueva Licencia"
+   - Edita licencias existentes haciendo clic en el icono de edición
+   - Elimina licencias con el icono de papelera
+   - Usa el campo de búsqueda para filtrar licencias
+
+3. **Gestión de Catálogos**
+   - Visita la página "Catálogos" para gestionar áreas, ubicaciones, bodegas y puestos
+   - Agrega nuevos elementos con el botón "+" en cada sección
+   - Edita y elimina elementos según sea necesario
+
+## 🌐 Despliegue
+
+El sistema está listo para ser desplegado en Vercel o cualquier otro servicio de hosting estático:
+
+1. Sube los archivos a un repositorio Git
+2. Conecta el repositorio con Vercel
+3. Configura las variables de entorno con tus credenciales de Supabase
+4. ¡Listo! Tu sistema estará disponible en línea
+
+Consulta `guia-despliegue.md` para instrucciones detalladas de despliegue.
 
 ## 🔒 Seguridad
 
-- Autenticación gestionada por Supabase
-- Políticas de Row Level Security (RLS) implementadas
-- Conexión segura mediante HTTPS
+- Los datos se almacenan de forma segura en Supabase
+- El sistema funciona con Row Level Security (RLS)
+- Las conexiones a la API de Supabase son seguras mediante HTTPS
 
-## 🤝 Contribuir
+## 🔄 Modo Demo
 
-Si deseas contribuir a este proyecto, por favor:
-1. Haz un fork del repositorio
-2. Crea una rama para tu funcionalidad
-3. Envía un pull request
+Si no hay conexión a Supabase, el sistema cambiará automáticamente a modo demo, almacenando los datos en localStorage del navegador para permitir pruebas sin conexión.
