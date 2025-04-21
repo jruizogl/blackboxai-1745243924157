@@ -10,11 +10,26 @@ CREATE TABLE IF NOT EXISTS public.ms_areas (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Agregar columnas si no existen
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='ms_areas' AND column_name='description') THEN
+        ALTER TABLE public.ms_areas ADD COLUMN description TEXT;
+    END IF;
+END$$;
+
 CREATE TABLE IF NOT EXISTS public.ms_locations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL UNIQUE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='ms_locations' AND column_name='description') THEN
+        ALTER TABLE public.ms_locations ADD COLUMN description TEXT;
+    END IF;
+END$$;
 
 CREATE TABLE IF NOT EXISTS public.ms_warehouses (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -23,11 +38,25 @@ CREATE TABLE IF NOT EXISTS public.ms_warehouses (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='ms_warehouses' AND column_name='description') THEN
+        ALTER TABLE public.ms_warehouses ADD COLUMN description TEXT;
+    END IF;
+END$$;
+
 CREATE TABLE IF NOT EXISTS public.ms_positions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name TEXT NOT NULL UNIQUE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='ms_positions' AND column_name='description') THEN
+        ALTER TABLE public.ms_positions ADD COLUMN description TEXT;
+    END IF;
+END$$;
 
 -- Crear la tabla de licencias con campos extendidos
 CREATE TABLE IF NOT EXISTS public.ms_licenses (
@@ -49,6 +78,16 @@ CREATE TABLE IF NOT EXISTS public.ms_licenses (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='ms_licenses' AND column_name='created_by') THEN
+        ALTER TABLE public.ms_licenses ADD COLUMN created_by UUID REFERENCES public.ms_users(id);
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='ms_licenses' AND column_name='updated_by') THEN
+        ALTER TABLE public.ms_licenses ADD COLUMN updated_by UUID REFERENCES public.ms_users(id);
+    END IF;
+END$$;
 
 -- Añadir comentarios a las tablas
 COMMENT ON TABLE public.ms_licenses IS 'Tabla para almacenar información de licencias de Microsoft';
