@@ -44,58 +44,123 @@ async function saveData() {
     }
 }
 
-// Load data from server with retry
-async function loadData(retryCount = 3) {
-    for (let i = 0; i < retryCount; i++) {
-        try {
-            const response = await fetch('/get-data');
-            if (!response.ok) {
-                throw new Error('Error al cargar los datos');
-            }
+// Default areas data
+const defaultAreas = [
+    { id: 1, name: 'Calidad', color: 'bg-blue-500', active: true },
+    { id: 2, name: 'Recursos Humanos', color: 'bg-green-500', active: true },
+    { id: 3, name: 'TI', color: 'bg-yellow-500', active: true },
+    { id: 4, name: 'Seguridad Patrimonial', color: 'bg-purple-500', active: true },
+    { id: 5, name: 'Seguridad e Higiene', color: 'bg-red-500', active: true },
+    { id: 6, name: 'Mantenimiento', color: 'bg-pink-500', active: true },
+    { id: 7, name: 'Dirección', color: 'bg-indigo-500', active: true },
+    { id: 8, name: 'Logística', color: 'bg-blue-500', active: true },
+    { id: 9, name: 'Compras', color: 'bg-green-500', active: true }
+];
 
-            const data = await response.json();
-            console.log('Loaded data:', data);
-
-            if (data.areas && Array.isArray(data.areas)) {
+// Load data from server or localStorage
+async function loadData() {
+    try {
+        // First try to load from localStorage
+        const savedData = localStorage.getItem('calendarData');
+        if (savedData) {
+            const data = JSON.parse(savedData);
+            if (data.areas && Array.isArray(data.areas) && data.calendarData && Array.isArray(data.calendarData)) {
                 areas = data.areas;
-                if (data.calendarData && Array.isArray(data.calendarData)) {
-                    calendarData = data.calendarData;
-                } else {
-                    // Initialize calendar data if not present
-                    calendarData = months.map((month, index) => {
-                        const activeAreas = areas.filter(a => a.active);
-                        const defaultArea = activeAreas[index % activeAreas.length];
-                        const firstWorkday = findFirstWorkday(2025, index);
-                        
-                        return {
-                            month: month,
-                            visits: [{
-                                date: firstWorkday,
-                                areas: [{
-                                    id: defaultArea.id,
-                                    name: defaultArea.name,
-                                    color: defaultArea.color
-                                }]
-                            }]
-                        };
-                    });
-                    // Save the initialized data
-                    await saveData();
-                }
+                calendarData = data.calendarData;
+                console.log('Loaded data from localStorage');
                 return true;
             }
-            return false;
-        } catch (error) {
-            console.error(`Error loading data (attempt ${i + 1}/${retryCount}):`, error);
-            if (i === retryCount - 1) {
-                alert('Error al cargar los datos. Por favor, recarga la página.');
-                return false;
-            }
-            // Wait 1 second before retrying
-            await new Promise(resolve => setTimeout(resolve, 1000));
         }
+
+        // En Vercel, saltamos la carga del servidor
+        if (window.location.hostname !== 'localhost') {
+            console.log('Running on Vercel, skipping server load');
+        } else {
+            // If no local data, try to load from server
+            try {
+                const response = await fetch('/get-data');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.areas && Array.isArray(data.areas)) {
+                        areas = data.areas;
+                        calendarData = data.calendarData || [];
+                        await saveData();
+                        return true;
+                    }
+                }
+            } catch (error) {
+                console.log('Server not available, using default data');
+            }
+        }
+
+        // If no data available, initialize with defaults
+        console.log('Initializing with default data');
+        areas = defaultAreas;
+        calendarData = months.map((month, index) => {
+            const activeAreas = areas.filter(a => a.active);
+            const defaultArea = activeAreas[index % activeAreas.length];
+            const firstWorkday = findFirstWorkday(2025, index);
+            
+            return {
+                month: month,
+                visits: [{
+                    date: firstWorkday,
+                    areas: [{
+                        id: defaultArea.id,
+                        name: defaultArea.name,
+                        color: defaultArea.color
+                    }]
+                }]
+            };
+        });
+        await saveData();
+        return true;
+    } catch (error) {
+        console.error('Error loading data:', error);
+        return false;
     }
-    return false;
+}
+
+// Save data to server and localStorage
+async function saveData() {
+    try {
+        const data = {
+            calendarData: calendarData,
+            areas: areas
+        };
+        
+        // Save to localStorage
+        localStorage.setItem('calendarData', JSON.stringify(data));
+        
+        // En Vercel, solo usamos localStorage
+        if (window.location.hostname !== 'localhost') {
+            console.log('Running on Vercel, using localStorage only');
+        } else {
+            // Try to save to server if on localhost
+            try {
+                const response = await fetch('/save-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    console.log('Could not save to server, saved to localStorage only');
+                }
+            } catch (error) {
+                console.log('Server not available, saved to localStorage only');
+            }
+        }
+
+        showSaveNotification('Cambios guardados');
+        return true;
+    } catch (error) {
+        console.error('Error saving data:', error);
+        showSaveNotification('Error al guardar cambios', true);
+        return false;
+    }
 }
 
 // Show save notification
