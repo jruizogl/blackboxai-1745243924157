@@ -9,6 +9,12 @@ PORT = 8000
 
 class LicenseManagementHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
+        # Redirigir la raíz a login.html
+        if self.path == '/' or self.path == '/index.html':
+            self.send_response(302)
+            self.send_header('Location', '/login.html')
+            self.end_headers()
+            return
         # Serve static files
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
 
