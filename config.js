@@ -7,8 +7,8 @@ function getConfig() {
     if (typeof window !== 'undefined') {
         // Valores por defecto para desarrollo local
         return {
-            supabaseUrl: window.SUPABASE_URL || 'https://tperggrkgjexpsibgmtb.supabase.co',
-            supabaseKey: window.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwZXJnZ3JrZ2pleHBzaWJnbXRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTAxODYsImV4cCI6MjA2MDgyNjE4Nn0.7ackU8djT7cNvNzznjfHU52USlFulpkub6xnMUq8DyQ',
+            supabaseUrl: window.SUPABASE_URL || 'https://yoggndevscherwfxmijg.supabase.co',
+            supabaseKey: window.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvZ2duZGV2c2NoZXJ3ZnhtaWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNjIyNjIsImV4cCI6MjA2MDgzODI2Mn0.JZ-FD37pDx-yCaqqQENkXElQOFUi61F5FT61795nToI',
             demoModeKey: 'ms_licenses_demo_data',
             version: '1.0.0'
         };
@@ -16,20 +16,15 @@ function getConfig() {
     
     // Para Vercel con variables de entorno
     return {
-        supabaseUrl: process.env.SUPABASE_URL || 'https://tperggrkgjexpsibgmtb.supabase.co',
-        supabaseKey: process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwZXJnZ3JrZ2pleHBzaWJnbXRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNTAxODYsImV4cCI6MjA2MDgyNjE4Nn0.7ackU8djT7cNvNzznjfHU52USlFulpkub6xnMUq8DyQ',
+        supabaseUrl: process.env.SUPABASE_URL || 'https://yoggndevscherwfxmijg.supabase.co',
+        supabaseKey: process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvZ2duZGV2c2NoZXJ3ZnhtaWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNjIyNjIsImV4cCI6MjA2MDgzODI2Mn0.JZ-FD37pDx-yCaqqQENkXElQOFUi61F5FT61795nToI',
         demoModeKey: 'ms_licenses_demo_data',
         version: '1.0.0'
     };
 }
 
-// Exportar la configuración
+// Crear la configuración
 const config = getConfig();
 
 // Para uso en el navegador
-if (typeof window !== 'undefined') {
-    window.appConfig = config;
-}
-
-// Para uso con módulos ES
-export default config;
+window.appConfig = config;
