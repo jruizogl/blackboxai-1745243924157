@@ -21,7 +21,7 @@ const months = [
 // Save data to server
 async function saveData() {
     try {
-        const response = await fetch('http://localhost:8000/save-data', {
+        const response = await fetch('/save-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,27 +40,28 @@ async function saveData() {
     } catch (error) {
         console.error('Error saving data:', error);
         showSaveNotification('Error al guardar cambios', true);
+        alert('Error al guardar los cambios. Por favor, intenta de nuevo.');
     }
 }
 
 // Load data from server
 async function loadData() {
     try {
-        const response = await fetch('http://localhost:8000/get-data');
+        const response = await fetch('/get-data');
         if (!response.ok) {
             throw new Error('Error al cargar los datos');
         }
 
         const data = await response.json();
-        if (data.areas && data.calendarData) {
+        if (data.areas && Array.isArray(data.areas)) {
             areas = data.areas;
-            calendarData = data.calendarData;
+            calendarData = Array.isArray(data.calendarData) ? data.calendarData : [];
             return true;
         }
         return false;
     } catch (error) {
         console.error('Error loading data:', error);
-        showSaveNotification('Error al cargar los datos', true);
+        alert('Error al cargar los datos. Por favor, recarga la página.');
         return false;
     }
 }
