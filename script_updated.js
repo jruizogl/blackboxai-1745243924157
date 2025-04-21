@@ -1,7 +1,7 @@
 // Obtener configuración desde config.js
 const SUPABASE_URL = window.appConfig?.supabaseUrl || 'https://yoggndevscherwfxmijg.supabase.co';
 const SUPABASE_KEY = window.appConfig?.supabaseKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvZ2duZGV2c2NoZXJ3ZnhtaWpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyNjIyNjIsImV4cCI6MjA2MDgzODI2Mn0.JZ-FD37pDx-yCaqqQENkXElQOFUi61F5FT61795nToI';
-const DEMO_MODE_KEY = window.appConfig?.demoModeKey || 'ms_licenses_demo_data';
+const DEMO_MODE_KEY = window.appConfig?.demoModeKey || 'ms_licenses_demo_data'; // Asegurar que solo se declara una vez
 const APP_VERSION = window.appConfig?.version || '1.0.0';
 
 // Log para debug
